@@ -23,6 +23,7 @@ impl Vec3 {
         &self.vec[2]
     }
 
+    // #[inline(never)]
     pub fn multiply_vec3_simd(a: &Vec3, b: &Vec3) -> Vec3 {
         // Multiply using SIMD
         let vecA = f32x4::from_array(a.vec);
@@ -41,6 +42,7 @@ impl Vec3 {
         Vec3 { vec: result }
     }
 
+    // #[inline(never)]
     pub fn multiply_vec3_scalar_simd(&self, scalar: f32) -> Vec3 {
         let vec_vec = f32x4::from_array(self.vec);
         let vec_scalar = f32x4::splat(scalar);

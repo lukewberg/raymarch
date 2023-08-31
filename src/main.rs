@@ -9,10 +9,10 @@ fn main() {
     // let benchA = Instant::now();
     let mut i = 0;
     while i < 1_000_000_000 {
-        // Vec3::multiply_vec3(&vecA, &vecB);
-        // Vec3::multiply_vec3_simd(&vecA, &vecB);
-        vec_a.multiply_vec3_scalar(1245.567231412334);
-        vec_a.multiply_vec3_scalar_simd(1245.567231412334);
+        Vec3::multiply_vec3(&vec_a, &vec_b);
+        Vec3::multiply_vec3_simd(&vec_a, &vec_b);
+        // vec_a.multiply_vec3_scalar(1245.567231412334);
+        // vec_a.multiply_vec3_scalar_simd(1245.567231412334);
         i += 1;
     }
     // let aResult = benchA.elapsed();
