@@ -20,29 +20,33 @@ impl Camera {
         }
     }
 
-    pub fn calc_uv(&self) -> Vec<Vec<(f32, f32)>> {
+    pub fn calc_uv(&self) -> Vec<(f32, f32)> {
+        let flattened_dimensions = self.output_dimensions.0 * self.output_dimensions.1;
         let mut result_vec = Vec::new();
+        result_vec.resize(flattened_dimensions as usize, (0_f32, 0_f32));
 
-        let mut y = 0;
-        let mut x = 0;
+        const chunk_size: u32 = 4; // SIMD register size
+        let total_iterations = (flattened_dimensions + chunk_size - 1) / chunk_size;
 
-        while y <= self.output_dimensions.1 {
-            let mut x_vec = Vec::new();
-            x_vec.resize(self.output_dimensions.0 as usize, (0_f32, 0_f32));
+        for i in (0..total_iterations).map(|x| x * chunk_size) {
+            let index_simd =
+                f32x4::from_array([i as f32, (i + 1) as f32, (i + 2) as f32, (i + 3) as f32]);
 
-            while x <= self.output_dimensions.0 {
-                // let x_splat = f32x4::splat(x as f32);
-                // let y_splat = f32x4::splat(y as f32);
-                // let u_simd = f32x4::from_array([x, x+1, x+2, x+3]);
-                // let v_simd = f32x4::from_array([y, y+1, y+2, y+3]);
-                let u = (x / self.output_dimensions.0) as f32 - 0.5; // Normalize to [-0.5, 0.5]
-                let v = (y / self.output_dimensions.1) as f32 - 0.5; // Normalize to [-0.5, 0.5]
-                x_vec[x as usize] = (u, v);
-                x = x + 1;
+            let y_simd = index_simd % f32x4::splat(self.output_dimensions.1 as f32);
+            let x_simd = index_simd / f32x4::splat(self.output_dimensions.1 as f32);
+
+            let u_simd =
+                (x_simd / f32x4::splat(self.output_dimensions.0 as f32)) - f32x4::splat(0.5);
+            let v_simd =
+                (y_simd / f32x4::splat(self.output_dimensions.1 as f32)) - f32x4::splat(0.5);
+
+            for j in 0..chunk_size {
+                if i + j < flattened_dimensions {
+                    result_vec[(i + j) as usize] = (u_simd[j as usize], v_simd[j as usize]);
+                }
             }
-            result_vec[y as usize] = x_vec;
-            y = y + 1;
         }
+
         result_vec
     }
 }
