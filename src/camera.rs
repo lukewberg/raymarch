@@ -1,6 +1,6 @@
 use std::simd::f32x4;
 
-use crate::vec3::Vec3;
+use crate::{uv::UV, vec3::Vec3};
 
 pub struct Camera {
     origin: Vec3,
@@ -20,15 +20,15 @@ impl Camera {
         }
     }
 
-    pub fn calc_uv(&self) -> Vec<(f32, f32)> {
+    pub fn calc_uv_simd(&self) -> UV {
         let flattened_dimensions = self.output_dimensions.0 * self.output_dimensions.1;
         let mut result_vec = Vec::new();
         result_vec.resize(flattened_dimensions as usize, (0_f32, 0_f32));
 
-        const chunk_size: u32 = 4; // SIMD register size
-        let total_iterations = (flattened_dimensions + chunk_size - 1) / chunk_size;
+        const CHUNK_SIZE: u32 = 4; // SIMD register size
+        let total_iterations = (flattened_dimensions + CHUNK_SIZE - 1) / CHUNK_SIZE;
 
-        for i in (0..total_iterations).map(|x| x * chunk_size) {
+        for i in (0..total_iterations).map(|x| x * CHUNK_SIZE) {
             let index_simd =
                 f32x4::from_array([i as f32, (i + 1) as f32, (i + 2) as f32, (i + 3) as f32]);
 
@@ -40,13 +40,13 @@ impl Camera {
             let v_simd =
                 (y_simd / f32x4::splat(self.output_dimensions.1 as f32)) - f32x4::splat(0.5);
 
-            for j in 0..chunk_size {
+            for j in 0..CHUNK_SIZE {
                 if i + j < flattened_dimensions {
                     result_vec[(i + j) as usize] = (u_simd[j as usize], v_simd[j as usize]);
                 }
             }
         }
 
-        result_vec
+        UV::new(result_vec, self.output_dimensions)
     }
 }

@@ -17,8 +17,8 @@ fn main() {
     // }
 
     let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 90.0, (1920, 1080));
-    let uv_coords = camera.calc_uv();
-    let sample_point = uv_coords[(100 * 1080 + 100 ) as usize];
+    let uv_coords = camera.calc_uv_simd();
+    let sample_point = uv_coords[(100, 100)];
     println!("{:?}", sample_point);
     // let aResult = benchA.elapsed();
     // println!("Bench A: {:.2?}", aResult);
