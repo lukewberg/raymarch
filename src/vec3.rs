@@ -11,6 +11,24 @@ impl Vec3 {
         }
     }
 
+    pub fn forward() -> Vec3 {
+        Vec3 {
+            vec: [0f32, 1_f32, 0f32, 0f32],
+        }
+    }
+
+    pub fn top() -> Vec3 {
+        Vec3 {
+            vec: [0f32, 0f32, 1_f32, 0f32],
+        }
+    }
+
+    pub fn right() -> Vec3 {
+        Vec3 {
+            vec: [1_f32, 0f32, 0f32, 0f32],
+        }
+    }
+
     pub fn x(&self) -> &f32 {
         &self.vec[0]
     }
