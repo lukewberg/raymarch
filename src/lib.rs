@@ -5,3 +5,4 @@ pub mod uv;
 pub mod ray;
 pub mod scene;
 pub mod light;
+pub mod matrix;

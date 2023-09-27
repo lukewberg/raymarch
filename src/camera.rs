@@ -28,8 +28,8 @@ impl Camera {
 
     pub fn calc_uv_simd(&self) -> UV {
         let flattened_dimensions = self.output_dimensions.0 * self.output_dimensions.1;
-        let mut result_vec = Vec::new();
-        result_vec.resize(flattened_dimensions as usize, (0_f32, 0_f32));
+        let mut result_vec = Vec::<(f32, f32)>::with_capacity(flattened_dimensions as usize);
+        // result_vec.resize(flattened_dimensions as usize, (0_f32, 0_f32));
 
         const CHUNK_SIZE: u32 = 4; // SIMD register size
         let total_iterations = (flattened_dimensions + CHUNK_SIZE - 1) / CHUNK_SIZE;
@@ -48,7 +48,8 @@ impl Camera {
 
             for j in 0..CHUNK_SIZE {
                 if i + j < flattened_dimensions {
-                    result_vec[(i + j) as usize] = (u_simd[j as usize], v_simd[j as usize]);
+                    result_vec.push((u_simd[j as usize], v_simd[j as usize]));
+                    // result_vec[(i + j) as usize] = (u_simd[j as usize], v_simd[j as usize]);
                 }
             }
         }
@@ -56,7 +57,5 @@ impl Camera {
         UV::new(result_vec, self.output_dimensions)
     }
 
-    pub fn rotate(&mut self) {
-
-    }
+    pub fn rotate(&mut self) {}
 }
