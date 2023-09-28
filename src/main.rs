@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use raymarch::{camera::Camera, vec3::Vec3};
+use raymarch::{camera::Camera, vec3::Vec3, matrix::Mat3};
 
 fn main() {
     // let vec_a = Vec3::new(2.34623342, 5.2983742, 9.12387978);
@@ -21,6 +21,10 @@ fn main() {
     let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 90.0, (1920, 1080));
     let uv_coords = camera.calc_uv_simd();
     let sample_point = uv_coords[(100, 100)];
+
+    // Testing matrices
+    let mat3_a = Mat3::pich(75_f32);
+    let mul_result = mat3_a * Vec3::new(11.312, 451.78, 32.8);
 
     // #[cfg(target_arch = "arm")]
     // use std::arch::is_arm_feature_detected;
