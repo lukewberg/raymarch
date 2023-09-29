@@ -7,3 +7,4 @@ pub mod scene;
 pub mod light;
 pub mod matrix;
 pub mod transformation;
+pub mod drawables;

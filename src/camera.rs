@@ -1,12 +1,10 @@
 use std::simd::f32x4;
 
-use crate::{uv::UV, vec3::Vec3};
+use crate::{transformation::Orientation, uv::UV, vec3::Vec3};
 
 pub struct Camera {
     origin: Vec3,
-    top: Vec3,
-    right: Vec3,
-    forward: Vec3,
+    orientation: Orientation,
     fov: (f32, f32),
     aspect_ratio: f32,
     output_dimensions: (u32, u32),
@@ -17,9 +15,7 @@ impl Camera {
         let v_fov = 2.0 * ((fov / 2.0).tan() * (16_f32 / 9_f32)).atan();
         Camera {
             origin,
-            top: Vec3::top(),
-            right: Vec3::right(),
-            forward: Vec3::forward(),
+            orientation: Orientation::new(Vec3::up(), Vec3::right(), Vec3::forward()),
             fov: (fov, v_fov),
             aspect_ratio: 16_f32 / 9_f32,
             output_dimensions,

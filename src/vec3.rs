@@ -17,7 +17,7 @@ impl Vec3 {
         }
     }
 
-    pub fn top() -> Vec3 {
+    pub fn up() -> Vec3 {
         Vec3 {
             vec: [0f32, 0f32, 1_f32, 0f32],
         }

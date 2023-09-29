@@ -1,4 +1,4 @@
-use crate::{camera::Camera, light::Light, vec3::Vec3};
+use crate::{camera::Camera, light::Light, transformation::Transformable, vec3::Vec3};
 
 pub struct Scene {
     pub camera: Camera,
@@ -6,7 +6,7 @@ pub struct Scene {
     pub scene_objects: Vec<Box<dyn SceneObject>>,
 }
 
-pub trait SceneObject {
+pub trait SceneObject: Transformable {
     fn pos(&self) -> &Vec3;
     fn sdf(&self) -> f32;
 }
