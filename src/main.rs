@@ -6,7 +6,7 @@ fn main() {
     // let vec_a = Vec3::new(2.34623342, 5.2983742, 9.12387978);
     // let vec_b = Vec3::new(7.348756, 6.289734, 3.903457);
 
-    let benchA = Instant::now();
+    let bench_a = Instant::now();
     let frame_buffer = [0u32; 100];
     // frame_buffer.split_array_mut();
     // let mut i = 0;
@@ -32,8 +32,8 @@ fn main() {
     // println("{}", is_arm_feature_detected!("neon"));
 
     println!("{:?}", sample_point);
-    let aResult = benchA.elapsed();
-    println!("Bench A: {:.2?}", aResult);
+    let result_a = bench_a.elapsed();
+    println!("Bench A: {:.2?}", result_a);
 
     // let benchB = Instant::now();
     // for i in 0..2_000_000_000 {

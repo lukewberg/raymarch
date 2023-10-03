@@ -51,11 +51,11 @@ impl Vec3 {
     // #[inline(never)]
     pub fn multiply_vec3_simd(a: &Vec3, b: &Vec3) -> Vec3 {
         // Multiply using SIMD
-        let vecA = f32x4::from_array(a.vec);
-        let vecB = f32x4::from_array(b.vec);
+        let vec_a = f32x4::from_array(a.vec);
+        let vec_b = f32x4::from_array(b.vec);
 
         Vec3 {
-            vec: (vecA * vecB).into(),
+            vec: (vec_a * vec_b).into(),
         }
     }
 
