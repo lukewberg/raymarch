@@ -48,6 +48,10 @@ impl Vec3 {
         self.vec = (vec_simd / mag_simd).into();
     }
 
+    pub fn magnitude(&self) -> f32 {
+        f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2))
+    }
+
     // #[inline(never)]
     pub fn multiply_vec3_simd(a: &Vec3, b: &Vec3) -> Vec3 {
         // Multiply using SIMD

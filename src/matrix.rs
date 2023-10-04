@@ -1,6 +1,6 @@
 use std::{
     ops::{self, Neg},
-    simd::{f32x4, Simd},
+    simd::f32x4,
 };
 
 use crate::vec3::Vec3;
@@ -20,7 +20,7 @@ impl Mat3 {
         }
     }
 
-    pub fn pich(angle: f32) -> Mat3 {
+    pub fn pitch(angle: f32) -> Mat3 {
         Mat3 {
             rows: (
                 [f32::cos(angle), 0f32, f32::sin(angle), 0f32],

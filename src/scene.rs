@@ -2,8 +2,21 @@ use crate::{camera::Camera, light::Light, transformation::Transformable, vec3::V
 
 pub struct Scene {
     pub camera: Camera,
-    pub lights: Vec<Light>,
+    // pub lights: Vec<Light>,
     pub scene_objects: Vec<Box<dyn SceneObject>>,
+}
+
+impl Scene {
+    pub fn new(camera: Camera, scene_objects: Vec<Box<dyn SceneObject>>) -> Scene {
+        Scene {
+            camera,
+            scene_objects,
+        }
+    }
+
+    pub fn render(&self) {
+        
+    }
 }
 
 pub trait SceneObject: Transformable {
