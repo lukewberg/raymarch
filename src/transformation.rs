@@ -16,4 +16,12 @@ impl Orientation {
     pub fn new(up: Vec3, right: Vec3, forward: Vec3) -> Orientation {
         Orientation { up, right, forward }
     }
+
+    pub fn default() -> Orientation {
+        Orientation {
+            up: Vec3::up(),
+            right: Vec3::right(),
+            forward: Vec3::forward(),
+        }
+    }
 }

@@ -41,11 +41,12 @@ impl Vec3 {
         &self.vec[2]
     }
 
-    pub fn normalize(&mut self) {
+    pub fn normalize(&mut self) -> &mut Self {
         let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
         let mag_simd = f32x4::splat(mag);
         let vec_simd = f32x4::from_array(self.vec);
         self.vec = (vec_simd / mag_simd).into();
+        self
     }
 
     pub fn magnitude(&self) -> f32 {

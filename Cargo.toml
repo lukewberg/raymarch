@@ -10,3 +10,6 @@ debug = true
 [profile.release]
 codegen-units = 1
 lto = true
+
+[dependencies]
+png = "0.17.10"

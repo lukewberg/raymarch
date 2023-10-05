@@ -1,4 +1,4 @@
-use crate::{camera::Camera, light::Light, transformation::Transformable, vec3::Vec3};
+use crate::{camera::Camera, light::Light, transformation::Transformable, vec3::Vec3, ray::Ray};
 
 pub struct Scene {
     pub camera: Camera,
@@ -15,7 +15,13 @@ impl Scene {
     }
 
     pub fn render(&self) {
-        
+        // Take the camera's UV grid and construct rays
+        let uv = self.camera.calc_uv_simd();
+        for i in 0..uv.coords.len() {
+            let current_coords = uv.coords[i];
+            let direction = self.camera.uv_direction(current_coords.0, current_coords.1).normalize();
+            Ray::new(self.camera.origin, direction, &self);
+        }
     }
 }
 

@@ -1,9 +1,9 @@
 use std::simd::f32x4;
 
-use crate::{transformation::Orientation, uv::UV, vec3::Vec3};
+use crate::{ray::Ray, transformation::Orientation, uv::UV, vec3::Vec3};
 
 pub struct Camera {
-    origin: Vec3,
+    pub origin: Vec3,
     orientation: Orientation,
     fov: (f32, f32),
     aspect_ratio: f32,
@@ -51,6 +51,16 @@ impl Camera {
         }
 
         UV::new(result_vec, self.output_dimensions)
+    }
+
+    
+    pub fn uv_direction(&self, u: f32, v: f32) -> Vec3 {
+        // You must manually normalize the result. (mutability and borrow checker)
+        Vec3::new(
+            u * self.aspect_ratio * self.fov.0.tan(),
+            v * self.fov.1.tan(),
+            -1.0,
+        )
     }
 
     pub fn rotate(&mut self) {}

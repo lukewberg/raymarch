@@ -28,14 +28,14 @@ fn main() {
     // }
 
     let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 90.0, (1920, 1080));
-    let uv_coords = camera.calc_uv_simd();
+    // let uv_coords = camera.calc_uv_simd();
+    // let sample_point = uv_coords[(100, 100)];
     let scene_objects: Vec<Box<dyn SceneObject>> = vec![Box::new(Sphere::new(
         Vec3::new(0_f32, 5_f32, 0_f32),
         1.5,
-        Orientation::new(Vec3::up(), Vec3::right(), Vec3::forward()),
+        Orientation::default(),
     ))];
     let mut scene = Scene::new(camera, scene_objects);
-    let sample_point = uv_coords[(100, 100)];
 
     // Testing matrices
     let mat3_a = Mat3::pitch(75_f32);
