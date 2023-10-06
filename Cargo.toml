@@ -9,7 +9,12 @@ debug = true
 
 [profile.release]
 codegen-units = 1
-lto = true
+lto = "fat"
+opt-level = 3
+
+[build]
+rustflags = ["-C", "target-cpu=native"]
 
 [dependencies]
 png = "0.17.10"
+
