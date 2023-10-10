@@ -1,4 +1,4 @@
-use std::{ops, simd::f32x4};
+use std::{ops, simd::{f32x4, StdFloat}};
 
 pub struct Vec3 {
     pub vec: [f32; 4],
@@ -41,19 +41,26 @@ impl Vec3 {
         &self.vec[2]
     }
 
-    pub fn normalize(&mut self) -> &mut Self {
+    pub fn normalize(&mut self) {
         let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
         let mag_simd = f32x4::splat(mag);
         let vec_simd = f32x4::from_array(self.vec);
         self.vec = (vec_simd / mag_simd).into();
-        self
     }
 
     pub fn magnitude(&self) -> f32 {
         f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2))
     }
 
-    // #[inline(never)]
+    /// Distance between this vector and that which is passed in
+    pub fn distance(&self, p: &Vec3) -> f32 {
+        let delta_vec = (*self - *p).vec;
+        let sum: [f32; 4] = (f32x4::from_array(delta_vec) * f32x4::from_array(delta_vec)).into();
+        let result: f32 = sum.iter().sum();
+        result.sqrt()
+
+    }
+
     pub fn multiply_vec3_simd(a: &Vec3, b: &Vec3) -> Vec3 {
         // Multiply using SIMD
         let vec_a = f32x4::from_array(a.vec);
@@ -72,7 +79,6 @@ impl Vec3 {
         Vec3 { vec: result }
     }
 
-    // #[inline(never)]
     pub fn multiply_vec3_scalar_simd(&self, scalar: f32) -> Vec3 {
         let vec_vec = f32x4::from_array(self.vec);
         let vec_scalar = f32x4::splat(scalar);
@@ -167,6 +173,18 @@ impl ops::Sub<f32> for Vec3 {
         let vec_vec = f32x4::from_array(self.vec);
         Vec3 {
             vec: (vec_scalar - vec_vec).into(),
+        }
+    }
+}
+
+impl ops::Sub<Vec3> for Vec3 {
+    type Output = Vec3;
+
+    fn sub(self, rhs: Vec3) -> Self::Output {
+        let vec_rhs = f32x4::from_array(rhs.vec);
+        let vec_vec = f32x4::from_array(self.vec);
+        Vec3 {
+            vec: (vec_rhs - vec_vec).into(),
         }
     }
 }

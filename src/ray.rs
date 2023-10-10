@@ -1,28 +1,30 @@
+use std::simd::f32x4;
+
 use crate::{scene::Scene, vec3::Vec3};
 
-pub struct Ray<'a> {
-    origin: Vec3,
-    direction: &'a mut Vec3,
-    scene: &'a Scene,
-}
+/// Marches the ray forward by the smallest distance returned by the scene's SceneObjects sdf functions.
+pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> u8 {
+    // Get distances to all Objects in scene
+    let tolerance: f32 = 0.0001;
+    let mut closest = f32::INFINITY;
+    let mut last_closest = f32::INFINITY;
+    let mut position = origin.clone();
 
-impl Ray<'_> {
-    pub fn new<'a>(origin: Vec3, direction: &'a mut Vec3, scene: &'a Scene) -> Ray<'a> {
-        Ray {
-            origin,
-            direction,
-            scene,
-        }
-    }
-
-    pub fn cast(&self) -> u8 {
-        // Get distances to all Objects in scene
-        let num_scene_objects = self.scene.scene_objects.len();
-        let mut distances: Vec<f32> = Vec::with_capacity(num_scene_objects);
+    while closest > tolerance {
+        let num_scene_objects = scene.scene_objects.len();
         for i in 0..num_scene_objects {
-            distances.push(self.scene.scene_objects[i].sdf());
+            let distance = scene.scene_objects[i].sdf(&position);
+            if distance < closest {
+                last_closest = closest;
+                closest = distance;
+                position.vec = (f32x4::splat(distance) + f32x4::from_array(position.vec)).into();
+            }
+
+            // Not a hit, abort!
+            if closest > last_closest {
+                return 0;
+            }
         }
-         
-        2
     }
+    1
 }

@@ -1,4 +1,4 @@
-use crate::{camera::Camera, light::Light, transformation::Transformable, vec3::Vec3, ray::Ray};
+use crate::{camera::Camera, light::Light, ray, transformation::Transformable, vec3::Vec3};
 
 pub struct Scene {
     pub camera: Camera,
@@ -19,13 +19,14 @@ impl Scene {
         let uv = self.camera.calc_uv_simd();
         for i in 0..uv.coords.len() {
             let current_coords = uv.coords[i];
-            let direction = self.camera.uv_direction(current_coords.0, current_coords.1).normalize();
-            Ray::new(self.camera.origin, direction, &self);
+            let mut direction = self.camera.uv_direction(current_coords.0, current_coords.1);
+            direction.normalize();
+            ray::march(&self, &self.camera.origin, &direction);
         }
     }
 }
 
 pub trait SceneObject: Transformable {
     fn pos(&self) -> &Vec3;
-    fn sdf(&self) -> f32;
+    fn sdf(&self, p: &Vec3) -> f32;
 }

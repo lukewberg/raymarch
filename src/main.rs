@@ -1,3 +1,4 @@
+#![feature(split_array)]
 use raymarch::{
     camera::Camera,
     drawables::sphere::Sphere,
@@ -13,11 +14,11 @@ fn main() {
     // let vec_b = Vec3::new(7.348756, 6.289734, 3.903457);
 
     let bench_a = Instant::now();
-    let _frame_buffer = [0u32; 100];
+    // let mut _frame_buffer = [0u32; 100];
     let num_cpus = std::thread::available_parallelism().unwrap();
     println!("{}", num_cpus);
 
-    // frame_buffer.split_array_mut();
+    // _frame_buffer.split_array_mut::<4>();
     // let mut i = 0;
     // while i < 1_000_000_000 {
     //     Vec3::multiply_vec3(&vec_a, &vec_b);
@@ -30,12 +31,14 @@ fn main() {
     let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 90.0, (1920, 1080));
     // let uv_coords = camera.calc_uv_simd();
     // let sample_point = uv_coords[(100, 100)];
+    // println!("{:?}", sample_point);
     let scene_objects: Vec<Box<dyn SceneObject>> = vec![Box::new(Sphere::new(
         Vec3::new(0_f32, 5_f32, 0_f32),
         1.5,
         Orientation::default(),
     ))];
     let mut scene = Scene::new(camera, scene_objects);
+    scene.render();
 
     // Testing matrices
     let mat3_a = Mat3::pitch(75_f32);
@@ -46,7 +49,6 @@ fn main() {
     // #[cfg(target_arch = "arm")]
     // println("{}", is_arm_feature_detected!("neon"));
 
-    println!("{:?}", sample_point);
     let result_a = bench_a.elapsed();
     println!("Bench A: {:.2?}", result_a);
 
