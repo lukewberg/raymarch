@@ -40,6 +40,7 @@ impl SceneObject for Sphere {
     }
 
     fn sdf(&self, p: &Vec3) -> f32 {
-        self.pos.magnitude() - self.radius
+        // self.pos.magnitude() - self.radius
+        p.distance(&self.pos) - self.radius
     }
 }

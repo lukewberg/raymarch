@@ -1,5 +1,9 @@
-use std::{ops, simd::{f32x4, StdFloat}};
+use std::{
+    ops,
+    simd::{f32x4, StdFloat},
+};
 
+#[derive(Clone, Copy)]
 pub struct Vec3 {
     pub vec: [f32; 4],
 }
@@ -54,11 +58,22 @@ impl Vec3 {
 
     /// Distance between this vector and that which is passed in
     pub fn distance(&self, p: &Vec3) -> f32 {
-        let delta_vec = (*self - *p).vec;
+        // Can't use implemented operator overloads because we don't want to move values.
+        let delta_vec: [f32; 4] =
+            (f32x4::from_array((*self).vec) - f32x4::from_array((*p).vec)).into();
         let sum: [f32; 4] = (f32x4::from_array(delta_vec) * f32x4::from_array(delta_vec)).into();
         let result: f32 = sum.iter().sum();
         result.sqrt()
+    }
 
+    pub fn scale(&self, scalar: f32) -> [f32; 4] {
+        (f32x4::from_array(self.vec) * f32x4::splat(scalar)).into()
+        // [
+        //     self.vec[0] * scalar,
+        //     self.vec[1] * scalar,
+        //     self.vec[2] * scalar,
+        //     0_f32
+        // ]
     }
 
     pub fn multiply_vec3_simd(a: &Vec3, b: &Vec3) -> Vec3 {
