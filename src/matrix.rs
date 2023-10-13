@@ -6,7 +6,7 @@ use std::{
 use crate::vec3::Vec3;
 
 pub struct Mat3 {
-    rows: ([f32; 4], [f32; 4], [f32; 4]),
+    pub rows: ([f32; 4], [f32; 4], [f32; 4]),
 }
 
 impl Mat3 {

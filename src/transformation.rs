@@ -7,9 +7,9 @@ pub trait Transformable {
 }
 
 pub struct Orientation {
-    up: Vec3,
-    right: Vec3,
-    forward: Vec3,
+    pub up: Vec3,
+    pub right: Vec3,
+    pub forward: Vec3,
 }
 
 impl Orientation {

@@ -6,22 +6,20 @@ use crate::{scene::Scene, vec3::Vec3};
 pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> u8 {
     // Get distances to all Objects in scene
     let tolerance: f32 = 0.0003;
-    let mut closest = f32::INFINITY;
     let mut last_closest = f32::INFINITY;
     let mut position = (*origin).clone();
     // let mut new_position: Option<[f32; 4]> = None;
 
-    while closest > tolerance {
+    while last_closest > tolerance {
+        let mut closest = f32::INFINITY;
+        let mut i = 0;
         let num_scene_objects = scene.scene_objects.len();
-        for i in 0..num_scene_objects {
+        while i < num_scene_objects {
             let distance = { scene.scene_objects[i].sdf(&position) };
 
             if distance < closest {
                 // last_closest = closest;
                 closest = distance;
-                // Scale direction by distance
-                let scaled = direction.scale(distance);
-                position.vec = (f32x4::from_array(scaled) + f32x4::from_array(position.vec)).into();
                 // new_position =
                 //     Some((f32x4::splat(distance) + f32x4::from_array(position.vec)).into());
             }
@@ -32,13 +30,18 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> u8 {
             // }
 
             if distance > 100_f32 {
-                return 0
+                return 0;
             }
 
             // if let Some(vec) = new_position {
             //     (position).vec = vec;
             // }
+            i += 1;
         }
+        last_closest = closest;
+        // Scale direction by distance
+        let scaled = direction.scale(closest);
+        position.vec = (f32x4::from_array(scaled) + f32x4::from_array(position.vec)).to_array();
     }
     1
 }

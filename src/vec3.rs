@@ -3,6 +3,8 @@ use std::{
     simd::{f32x4, StdFloat},
 };
 
+use crate::matrix::Mat3;
+
 #[derive(Clone, Copy)]
 pub struct Vec3 {
     pub vec: [f32; 4],
@@ -62,7 +64,7 @@ impl Vec3 {
         let delta_vec: [f32; 4] =
             (f32x4::from_array((*self).vec) - f32x4::from_array((*p).vec)).into();
         let sum: [f32; 4] = (f32x4::from_array(delta_vec) * f32x4::from_array(delta_vec)).into();
-        let result: f32 = sum.iter().sum();
+        let result = (f32x4::splat(sum[0]) + f32x4::splat(sum[1]) + f32x4::splat(sum[2])).as_array()[0];
         result.sqrt()
     }
 
