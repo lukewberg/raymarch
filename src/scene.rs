@@ -1,4 +1,4 @@
-use std::{fs::File, io::BufWriter, path::Path};
+use std::{fs::File, io::BufWriter, path::Path, thread};
 
 use crate::{camera::Camera, light::Light, ray, transformation::Transformable, vec3::Vec3};
 
@@ -18,23 +18,22 @@ impl Scene {
 
     pub fn render(&self) {
         // Take the camera's UV grid and construct rays
-        let uv = self.camera.calc_uv_simd();
-        let mut result_vec: Vec<u8> = Vec::with_capacity(uv.coords.len());
+        let uv = self.camera.calc_uv();
+        let mut result_vec: Vec<f32> = Vec::with_capacity(uv.coords.len());
         for i in 0..uv.coords.len() {
-            let current_coords = uv.coords[i];
-            let mut direction = self.camera.uv_direction(current_coords.0, current_coords.1);
+            let (x, y) = self.camera.uv_to_screen(uv.coords[i]);
+            let mut direction = self
+                .camera
+                .screen_to_world(x, y);
             direction.normalize();
             result_vec.push(ray::march(&self, &self.camera.origin, &direction));
         }
         let mut converted_results: Vec<[u8; 4]> = Vec::with_capacity(result_vec.len());
         for x in result_vec {
-            if x == 1 {
-                converted_results.push([0, 0, 0, 255]);
-            } else {
-                converted_results.push([255, 255, 255, 255]);
-            }
+            let color_is = (255_f32*x) as u8;
+            converted_results.push([color_is, color_is, color_is, 255]);
         }
-        Scene::flush_png(&(*(converted_results.concat())), 1920, 1080)
+        Scene::flush_png(&(*(converted_results.concat())), 2560, 1440)
     }
 
     pub fn flush_png(data: &[u8], width: u32, height: u32) {

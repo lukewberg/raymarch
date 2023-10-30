@@ -15,8 +15,8 @@ fn main() {
 
     let bench_a = Instant::now();
     // let mut _frame_buffer = [0u32; 100];
-    let num_cpus = std::thread::available_parallelism().unwrap();
-    println!("{}", num_cpus);
+    // let num_cpus = std::thread::available_parallelism().unwrap();
+    // println!("{}", num_cpus);
 
     // _frame_buffer.split_array_mut::<4>();
     // let mut i = 0;
@@ -28,21 +28,33 @@ fn main() {
     //     i += 1;
     // }
 
-    let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 90.0, (1920, 1080));
+    let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 120.0, (2560, 1440));
     // let uv_coords = camera.calc_uv_simd();
     // let sample_point = uv_coords[(100, 100)];
     // println!("{:?}", sample_point);
-    let scene_objects: Vec<Box<dyn SceneObject>> = vec![Box::new(Sphere::new(
-        Vec3::new(0_f32, 5_f32, 0_f32),
-        1.5,
-        Orientation::default(),
-    ))];
+    let scene_objects: Vec<Box<dyn SceneObject>> = vec![
+        Box::new(Sphere::new(
+            Vec3::new(-3_f32, 7_f32, 0_f32),
+            1.5,
+            Orientation::default(),
+        )),
+        Box::new(Sphere::new(
+            Vec3::new(-7_f32, 5_f32, 0_f32),
+            1.5,
+            Orientation::default(),
+        )),
+        Box::new(Sphere::new(
+            Vec3::new(1.5_f32, 7_f32, 1_f32),
+            1.5,
+            Orientation::default(),
+        )),
+    ];
     let mut scene = Scene::new(camera, scene_objects);
     scene.render();
 
     // Testing matrices
-    let mat3_a = Mat3::pitch(75_f32);
-    let _mul_result = mat3_a * Vec3::new(11.312, 451.78, 32.8);
+    // let mat3_a = Mat3::pitch(75_f32);
+    // let _mul_result = mat3_a * Vec3::new(11.312, 451.78, 32.8);
 
     // #[cfg(target_arch = "arm")]
     // use std::arch::is_arm_feature_detected;

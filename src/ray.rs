@@ -3,11 +3,12 @@ use std::simd::f32x4;
 use crate::{scene::Scene, vec3::Vec3};
 
 /// Marches the ray forward by the smallest distance returned by the scene's SceneObjects sdf functions.
-pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> u8 {
+pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
     // Get distances to all Objects in scene
     let tolerance: f32 = 0.0003;
     let mut last_closest = f32::INFINITY;
     let mut position = (*origin).clone();
+    let mut steps = 0;
     // let mut new_position: Option<[f32; 4]> = None;
 
     while last_closest > tolerance {
@@ -30,7 +31,7 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> u8 {
             // }
 
             if distance > 100_f32 {
-                return 0;
+                return 0_f32;
             }
 
             // if let Some(vec) = new_position {
@@ -42,6 +43,7 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> u8 {
         // Scale direction by distance
         let scaled = direction.scale(closest);
         position.vec = (f32x4::from_array(scaled) + f32x4::from_array(position.vec)).to_array();
+        steps += 1;
     }
-    1
+    1_f32 - (steps as f32 / 50_f32)
 }
