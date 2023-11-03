@@ -2,6 +2,8 @@
 name = "raymarch"
 version = "0.1.0"
 edition = "2021"
+authors = ["Luke Berg"]
+description = "A raymarcher written in Rust. Accelerated with SIMD."
 
 [profile.profiling]
 inherits = "release"
@@ -16,5 +18,6 @@ opt-level = 3
 rustflags = ["-C", "target-cpu=native"]
 
 [dependencies]
+clap = { version = "4.4.7", features = ["derive"] }
 png = "0.17.10"
 

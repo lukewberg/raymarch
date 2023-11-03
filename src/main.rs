@@ -1,8 +1,9 @@
 #![feature(split_array)]
+use clap::Parser;
 use raymarch::{
     camera::Camera,
+    cli::Cli,
     drawables::sphere::Sphere,
-    matrix::Mat3,
     scene::{Scene, SceneObject},
     transformation::Orientation,
     vec3::Vec3,
@@ -13,6 +14,7 @@ fn main() {
     // let vec_a = Vec3::new(2.34623342, 5.2983742, 9.12387978);
     // let vec_b = Vec3::new(7.348756, 6.289734, 3.903457);
 
+    let args = Cli::parse();
     let bench_a = Instant::now();
     // let mut _frame_buffer = [0u32; 100];
     // let num_cpus = std::thread::available_parallelism().unwrap();
@@ -50,8 +52,8 @@ fn main() {
         )),
     ];
     let mut scene = Scene::new(camera, scene_objects);
-    scene.render();
-
+    scene.render(args.threading);
+    
     // Testing matrices
     // let mat3_a = Mat3::pitch(75_f32);
     // let _mul_result = mat3_a * Vec3::new(11.312, 451.78, 32.8);

@@ -1,4 +1,4 @@
-use std::{fs::File, io::BufWriter, path::Path, thread};
+use std::{fs::File, io::BufWriter, path::Path};
 
 use crate::{camera::Camera, light::Light, ray, transformation::Transformable, vec3::Vec3};
 
@@ -16,21 +16,19 @@ impl Scene {
         }
     }
 
-    pub fn render(&self) {
+    pub fn render(&self, is_multi_threaded: bool) {
         // Take the camera's UV grid and construct rays
         let uv = self.camera.calc_uv();
         let mut result_vec: Vec<f32> = Vec::with_capacity(uv.coords.len());
         for i in 0..uv.coords.len() {
             let (x, y) = self.camera.uv_to_screen(uv.coords[i]);
-            let mut direction = self
-                .camera
-                .screen_to_world(x, y);
+            let mut direction = self.camera.screen_to_world(x, y);
             direction.normalize();
             result_vec.push(ray::march(&self, &self.camera.origin, &direction));
         }
         let mut converted_results: Vec<[u8; 4]> = Vec::with_capacity(result_vec.len());
         for x in result_vec {
-            let color_is = (255_f32*x) as u8;
+            let color_is = (255_f32 * x) as u8;
             converted_results.push([color_is, color_is, color_is, 255]);
         }
         Scene::flush_png(&(*(converted_results.concat())), 2560, 1440)

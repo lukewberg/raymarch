@@ -8,3 +8,5 @@ pub mod scene;
 pub mod transformation;
 pub mod uv;
 pub mod vec3;
+pub mod cli;
+pub mod unsafe_buffer;

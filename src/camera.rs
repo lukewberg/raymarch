@@ -1,6 +1,6 @@
 use std::{f32::consts::PI, simd::f32x4};
 
-use crate::{matrix::Mat3, transformation::Orientation, uv::Uv, vec3::Vec3};
+use crate::{transformation::Orientation, uv::Uv, vec3::Vec3};
 
 pub struct Camera {
     pub origin: Vec3,
