@@ -4,11 +4,12 @@ use raymarch::{
     camera::Camera,
     cli::Cli,
     drawables::sphere::Sphere,
-    scene::{Scene, SceneObject},
+    scene::{RenderOptions, Scene, SceneObject},
     transformation::Orientation,
+    unsafe_buffer::UnsafeBuffer,
     vec3::Vec3,
 };
-use std::time::Instant;
+use std::{sync::Arc, time::Instant};
 
 fn main() {
     // let vec_a = Vec3::new(2.34623342, 5.2983742, 9.12387978);
@@ -17,7 +18,7 @@ fn main() {
     let args = Cli::parse();
     let bench_a = Instant::now();
     // let mut _frame_buffer = [0u32; 100];
-    // let num_cpus = std::thread::available_parallelism().unwrap();
+    let num_cpus = std::thread::available_parallelism().unwrap();
     // println!("{}", num_cpus);
 
     // _frame_buffer.split_array_mut::<4>();
@@ -30,7 +31,12 @@ fn main() {
     //     i += 1;
     // }
 
-    let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 120.0, (2560, 1440));
+    let result_buffer = Arc::new(UnsafeBuffer::<u8>::new(
+        (args.width * args.height) as usize,
+        num_cpus.get(),
+    ));
+
+    let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 120.0, (args.width, args.height));
     // let uv_coords = camera.calc_uv_simd();
     // let sample_point = uv_coords[(100, 100)];
     // println!("{:?}", sample_point);
@@ -52,8 +58,12 @@ fn main() {
         )),
     ];
     let mut scene = Scene::new(camera, scene_objects);
-    scene.render(args.threading);
-    
+    scene.render(RenderOptions {
+        threaded: args.threaded,
+        width: args.width,
+        height: args.height,
+    });
+
     // Testing matrices
     // let mat3_a = Mat3::pitch(75_f32);
     // let _mul_result = mat3_a * Vec3::new(11.312, 451.78, 32.8);
@@ -64,7 +74,7 @@ fn main() {
     // println("{}", is_arm_feature_detected!("neon"));
 
     let result_a = bench_a.elapsed();
-    println!("Bench A: {:.2?}", result_a);
+    println!("Done in: {:.2?}", result_a);
 
     // let benchB = Instant::now();
     // for i in 0..2_000_000_000 {

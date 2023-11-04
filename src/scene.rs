@@ -16,7 +16,7 @@ impl Scene {
         }
     }
 
-    pub fn render(&self, is_multi_threaded: bool) {
+    pub fn render(&self, options: RenderOptions) {
         // Take the camera's UV grid and construct rays
         let uv = self.camera.calc_uv();
         let mut result_vec: Vec<f32> = Vec::with_capacity(uv.coords.len());
@@ -31,7 +31,7 @@ impl Scene {
             let color_is = (255_f32 * x) as u8;
             converted_results.push([color_is, color_is, color_is, 255]);
         }
-        Scene::flush_png(&(*(converted_results.concat())), 2560, 1440)
+        Scene::flush_png(&(*(converted_results.concat())), options.width, options.height)
     }
 
     pub fn flush_png(data: &[u8], width: u32, height: u32) {
@@ -55,6 +55,12 @@ impl Scene {
         // let data = [255, 0, 0, 255, 0, 0, 0, 255];
         writer.write_image_data(data).unwrap();
     }
+}
+
+pub struct RenderOptions {
+    pub threaded: bool,
+    pub width: u32,
+    pub height: u32,
 }
 
 pub trait SceneObject: Transformable {

@@ -3,11 +3,11 @@ use std::{cell::UnsafeCell, ops};
 pub struct UnsafeBuffer<T> {
     pub capacity: usize,
     pub buffer: UnsafeCell<Vec<T>>,
-    threads: u8,
+    threads: usize,
 }
 
 impl<T> UnsafeBuffer<T> {
-    pub fn new(capacity: usize, threads: u8) -> Self {
+    pub fn new(capacity: usize, threads: usize) -> Self {
         UnsafeBuffer {
             capacity,
             buffer: UnsafeCell::new(Vec::<T>::with_capacity(capacity)),
@@ -21,6 +21,8 @@ impl<T> UnsafeBuffer<T> {
             (*buffer)[index] = value;
         }
     }
+
+    // pub fn get_valid_index(thread_id: u8, step: usize) -> 
 }
 
 impl<T> ops::Index<usize> for UnsafeBuffer<T> {
