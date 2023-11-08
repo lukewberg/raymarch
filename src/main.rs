@@ -31,10 +31,8 @@ fn main() {
     //     i += 1;
     // }
 
-    let result_buffer = Arc::new(UnsafeBuffer::<u8>::new(
-        (args.width * args.height) as usize,
-        num_cpus.get(),
-    ));
+    let result_buffer =
+        UnsafeBuffer::<f32>::new((args.width * args.height) as usize, num_cpus.get());
 
     let camera = Camera::new(Vec3::new(0.0, 0.0, 0.0), 120.0, (args.width, args.height));
     // let uv_coords = camera.calc_uv_simd();
@@ -57,12 +55,16 @@ fn main() {
             Orientation::default(),
         )),
     ];
-    let mut scene = Scene::new(camera, scene_objects);
-    scene.render(RenderOptions {
+    let mut scene = Arc::new(Scene::new(camera, scene_objects));
+    let render_options = RenderOptions {
         threaded: args.threaded,
         width: args.width,
         height: args.height,
-    });
+        shared_buffer: result_buffer,
+    };
+
+    // scene.render();
+    Scene::render_parallel(scene, render_options);
 
     // Testing matrices
     // let mat3_a = Mat3::pitch(75_f32);
