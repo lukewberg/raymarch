@@ -54,7 +54,7 @@ fn main() {
         //     1.5,
         //     Orientation::default(),
         // )),
-        Box::new(Mandelbulb::new(Vec3::new(0_f32, 7_f32, 0_f32), 8.0))
+        Box::new(Mandelbulb::new(Vec3::new(0_f32, 2_f32, 0_f32), 8.0))
     ];
     let mut scene = Arc::new(Scene::new(camera, scene_objects));
     let render_options = RenderOptions {
@@ -64,8 +64,8 @@ fn main() {
         shared_buffer: result_buffer,
     };
 
-    scene.render(render_options);
-    // Scene::render_parallel(scene, render_options);
+    // scene.render(render_options);
+    Scene::render_parallel(scene, render_options);
 
     // Testing matrices
     // let mat3_a = Mat3::pitch(75_f32);

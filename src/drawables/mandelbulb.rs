@@ -24,15 +24,22 @@ impl SceneObject for Mandelbulb {
         let mut z = *p;
         let mut dr = 1_f32;
         let mut r: f32 = 0_f32;
+        let epsilon = 1e-6_f32; // Small constant to avoid division by zero
         for i in 0..20 {
             r = z.magnitude();
+
+            if r < epsilon {
+                // Avoid division by zero by setting r to a small value
+                r = epsilon;
+            }
+
             if r > 4.0 {
                 break;
             };
 
             // convert to polar coordinates
-            let mut theta = (z.z() / r).acos();
-            let mut phi = z.y().atan2(*(z.x()));
+            let mut theta = (z.vec[2] / r).acos();
+            let mut phi = z.vec[1].atan2(z.vec[0]);
             // dr =  pow( r, self.power-1.0)*Power*dr + 1.0;
             dr = r.powf(self.power - 1_f32) * self.power * dr + 1_f32;
             // scale and rotate the point
