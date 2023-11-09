@@ -6,7 +6,7 @@ pub struct UnsafeBuffer<T> {
     pub threads: usize,
 }
 
-unsafe impl<T> Sync for UnsafeBuffer<T>{}
+unsafe impl<T> Sync for UnsafeBuffer<T> {}
 
 impl<T> UnsafeBuffer<T> {
     pub fn new(capacity: usize, threads: usize) -> Self {
@@ -29,16 +29,19 @@ impl<T> UnsafeBuffer<T> {
     }
 
     pub fn get_valid_index(&self, thread_id: usize, step: usize) -> Option<usize> {
-        if !(thread_id <= self.threads) {
-            return None;
-        } else if let Some(result) = Option::Some(thread_id * step) {
-            if result <= self.capacity {
-                if result != 0 {
-                    return Some(result - 1);
-                } else {
-                    return Some(result);
-                }
+        if thread_id <= self.threads{
+            let result = ((self.threads - 1) * step) + thread_id;
+            if result < self.capacity {
+                return Some(result);
             }
+            // match thread_id {
+            //     0 => {
+            //         return Some(step * (self.threads - 1));
+            //     }
+            //     _ => {
+            //         return Some((step * (self.threads)) + thread_id);
+            //     }
+            // }
         }
         None
     }
@@ -61,8 +64,7 @@ impl<T> ops::Index<usize> for UnsafeBuffer<T>
     }
 }
 
-impl<T> ops::IndexMut<usize> for UnsafeBuffer<T>
-{
+impl<T> ops::IndexMut<usize> for UnsafeBuffer<T> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         todo!()
     }

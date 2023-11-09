@@ -180,6 +180,18 @@ impl ops::Add<f32> for Vec3 {
     }
 }
 
+impl ops::Add<Vec3> for Vec3 {
+    type Output = Vec3;
+
+    fn add(self, rhs: Vec3) -> Self::Output {
+        let lhs = f32x4::from_array(self.vec);
+        let rhs_simd = f32x4::from_array(rhs.vec);
+        Vec3 {
+            vec: (lhs + rhs_simd).into()
+        }
+    }
+}
+
 impl ops::Sub<f32> for Vec3 {
     type Output = Vec3;
 

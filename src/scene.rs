@@ -66,10 +66,10 @@ impl Scene {
             let cloned_uv = uv.clone();
             handles.push(thread::spawn(move || {
                 for i in 0..cloned_uv.coords.len() {
-                    let (x, y) = cloned_scene.camera.uv_to_screen(cloned_uv.coords[i]);
-                    let mut direction = cloned_scene.camera.screen_to_world(x, y);
-                    direction.normalize();
                     if let Some(index) = result_buffer.get_valid_index(id, i) {
+                        let (x, y) = cloned_scene.camera.uv_to_screen(cloned_uv.coords[index]);
+                        let mut direction = cloned_scene.camera.screen_to_world(x, y);
+                        direction.normalize();
                         result_buffer.write(
                             index,
                             ray::march(&cloned_scene, &cloned_scene.camera.origin, &direction),

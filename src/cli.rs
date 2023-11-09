@@ -1,7 +1,7 @@
 use clap::Parser;
 
 #[derive(Parser)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version, about, long_about = None, disable_help_flag(true))]
 pub struct Cli {
     /// Should rendering be single or multi threaded?
     #[arg(long, short, default_value = "true")]

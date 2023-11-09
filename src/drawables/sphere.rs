@@ -20,6 +20,17 @@ impl Sphere {
     }
 }
 
+impl SceneObject for Sphere {
+    fn pos(&self) -> &Vec3 {
+        &self.pos
+    }
+
+    fn sdf(&self, p: &Vec3) -> f32 {
+        // self.pos.magnitude() - self.radius
+        p.distance(&self.pos) - self.radius
+    }
+}
+
 impl Transformable for Sphere {
     fn rotate(&mut self, x: f32, y: f32, z: f32) {
         todo!()
@@ -31,16 +42,5 @@ impl Transformable for Sphere {
 
     fn translate(&mut self) {
         todo!()
-    }
-}
-
-impl SceneObject for Sphere {
-    fn pos(&self) -> &Vec3 {
-        &self.pos
-    }
-
-    fn sdf(&self, p: &Vec3) -> f32 {
-        // self.pos.magnitude() - self.radius
-        p.distance(&self.pos) - self.radius
     }
 }
