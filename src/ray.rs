@@ -45,5 +45,5 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
         position.vec = (f32x4::from_array(scaled) + f32x4::from_array(position.vec)).to_array();
         steps += 1;
     }
-    1_f32 - (steps as f32 / 50_f32)
+    1_f32 - (steps as f32 / 120_f32)
 }
