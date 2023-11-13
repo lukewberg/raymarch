@@ -4,7 +4,7 @@ use clap::Parser;
 #[command(author, version, about, long_about = None, disable_help_flag(true))]
 pub struct Cli {
     /// Should rendering be single or multi threaded?
-    #[arg(long, short, default_value = "true")]
+    #[arg(long, short, default_value = "false")]
     pub threaded: bool,
 
     /// Outputted image width

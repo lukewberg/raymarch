@@ -38,7 +38,8 @@ impl Scene {
         let mut result_vec: Vec<f32> = Vec::with_capacity(uv.coords.len());
         for i in 0..uv.coords.len() {
             let (x, y) = self.camera.uv_to_screen(uv.coords[i]);
-            let mut direction = self.camera.screen_to_world(x, y);
+            let screen_projection = self.camera.screen_to_world(x, y);
+            let mut direction = screen_projection - self.camera.origin;
             direction.normalize();
             result_vec.push(ray::march(&self, &self.camera.origin, &direction));
         }
@@ -68,7 +69,8 @@ impl Scene {
                 for i in 0..cloned_uv.coords.len() {
                     if let Some(index) = result_buffer.get_valid_index(id, i) {
                         let (x, y) = cloned_scene.camera.uv_to_screen(cloned_uv.coords[index]);
-                        let mut direction = cloned_scene.camera.screen_to_world(x, y);
+                        let screen_projection = cloned_scene.camera.screen_to_world(x, y);
+                        let mut direction = screen_projection - cloned_scene.camera.origin;
                         direction.normalize();
                         result_buffer.write(
                             index,

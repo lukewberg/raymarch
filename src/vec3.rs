@@ -1,7 +1,5 @@
 use std::{ops, simd::f32x4};
 
-use crate::matrix::Mat3;
-
 #[derive(Clone, Copy)]
 pub struct Vec3 {
     pub vec: [f32; 4],
@@ -56,7 +54,7 @@ impl Vec3 {
         let mag_simd = f32x4::splat(mag);
         let vec_simd = f32x4::from_array(self.vec);
         Vec3 {
-            vec: (vec_simd / mag_simd).into()
+            vec: (vec_simd / mag_simd).into(),
         }
     }
 
@@ -196,7 +194,7 @@ impl ops::Add<Vec3> for Vec3 {
         let lhs = f32x4::from_array(self.vec);
         let rhs_simd = f32x4::from_array(rhs.vec);
         Vec3 {
-            vec: (lhs + rhs_simd).into()
+            vec: (lhs + rhs_simd).into(),
         }
     }
 }
@@ -220,7 +218,7 @@ impl ops::Sub<Vec3> for Vec3 {
         let vec_rhs = f32x4::from_array(rhs.vec);
         let vec_vec = f32x4::from_array(self.vec);
         Vec3 {
-            vec: (vec_rhs - vec_vec).into(),
+            vec: (vec_vec - vec_rhs).into(),
         }
     }
 }

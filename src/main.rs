@@ -39,22 +39,22 @@ fn main() {
     // let sample_point = uv_coords[(100, 100)];
     // println!("{:?}", sample_point);
     let scene_objects: Vec<Box<dyn SceneObject>> = vec![
-        Box::new(Sphere::new(
-            Vec3::new(-3_f32, 7_f32, 0_f32),
-            1.5,
-            Orientation::default(),
-        )),
+        // Box::new(Sphere::new(
+        //     Vec3::new(-3_f32, 7_f32, 0_f32),
+        //     1.5,
+        //     Orientation::default(),
+        // )),
         Box::new(Sphere::new(
             Vec3::new(-7_f32, 5_f32, 0_f32),
             1.5,
             Orientation::default(),
         )),
-        Box::new(Sphere::new(
-            Vec3::new(1.5_f32, 7_f32, 1_f32),
-            1.5,
-            Orientation::default(),
-        )),
-        // Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 8.0))
+        // Box::new(Sphere::new(
+        //     Vec3::new(1.5_f32, 7_f32, 1_f32),
+        //     1.5,
+        //     Orientation::default(),
+        // )),
+        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 8.0))
     ];
     let mut scene = Arc::new(Scene::new(camera, scene_objects));
     let render_options = RenderOptions {

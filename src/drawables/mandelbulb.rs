@@ -21,19 +21,13 @@ impl SceneObject for Mandelbulb {
     }
 
     fn sdf(&self, p: &Vec3) -> f32 {
-        let mut z = *p - self.pos;
+        let mut z = *p;
         let mut dr = 1_f32;
         let mut r: f32 = 0_f32;
-        let epsilon = 1e-6_f32; // Small constant to avoid division by zero
         for i in 0..20 {
             r = z.magnitude();
 
-            if r < epsilon {
-                // Avoid division by zero by setting r to a small value
-                r = epsilon;
-            }
-
-            if r > 1.5 {
+            if r > 4.0 {
                 break;
             };
 
