@@ -22,9 +22,9 @@ impl SceneObject for Mandelbulb {
 
     fn sdf(&self, p: &Vec3) -> f32 {
         let mut z = *p;
-        let mut dr = 1_f32;
+        let mut dr = 1.0;
         let mut r: f32 = 0_f32;
-        for i in 0..20 {
+        for i in 0..90 {
             r = z.magnitude();
 
             if r > 4.0 {
@@ -32,12 +32,16 @@ impl SceneObject for Mandelbulb {
             };
 
             // convert to polar coordinates
-            let mut theta = (z.vec[2] / r).acos();
-            let mut phi = z.vec[1].atan2(z.vec[0]);
+            let mut theta = f32::acos(z.vec[2] / r);
+            // let mut theta = (z.vec[2] / r).acos();
+            let mut phi = f32::atan2(z.vec[1], z.vec[0]);
+            // let mut phi = z.vec[1].atan2(z.vec[0]);
             // dr =  pow( r, self.power-1.0)*Power*dr + 1.0;
-            dr = r.powf(self.power - 1_f32) * self.power * dr + 1_f32;
+            dr = f32::powf(r, self.power - 1.0) * self.power*dr + 1.0;
+            // dr = r.powf(self.power - 1.0) * self.power * dr + 1.0;
             // scale and rotate the point
-            let zr = r.powf(self.power);
+            let zr = f32::powf(r, self.power);
+            // let zr = r.powf(self.power);
             theta = theta * self.power;
             phi = phi * self.power;
 

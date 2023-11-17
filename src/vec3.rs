@@ -120,6 +120,34 @@ impl Vec3 {
         }
     }
 
+    pub fn abs(&self) -> Vec3 {
+        Vec3 {
+            vec: [self.vec[0].abs(), self.vec[1].abs(), self.vec[2].abs(), 0.0],
+        }
+    }
+
+    pub fn combined_max(a: &Vec3, b: &Vec3) -> Vec3 {
+        Vec3 {
+            vec: [
+                a.vec[0].max(b.vec[0]),
+                a.vec[1].max(b.vec[1]),
+                a.vec[2].max(b.vec[2]),
+                0.0,
+            ],
+        }
+    }
+
+    pub fn combined_min(a: &Vec3, b: &Vec3) -> Vec3 {
+        Vec3 {
+            vec: [
+                a.vec[0].min(b.vec[0]),
+                a.vec[1].min(b.vec[1]),
+                a.vec[2].min(b.vec[2]),
+                0.0,
+            ],
+        }
+    }
+
     // pub fn batch_multiply_vec3_simd(vecs_a: [Vec3; ], vecs_b: [Vec3]) -> Vec<Vec3> {
     //     Vec::new()
     // }

@@ -41,8 +41,8 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
         }
         last_closest = closest;
         // Scale direction by distance
-        let scaled = direction.scale(closest);
-        position.vec = (f32x4::from_array(scaled) + f32x4::from_array(position.vec)).to_array();
+        let scaled = direction.scale(closest * 0.95);
+        position.vec = (f32x4::from_array(position.vec) + f32x4::from_array(scaled)).to_array();
         steps += 1;
     }
     1_f32 - (steps as f32 / 75_f32)

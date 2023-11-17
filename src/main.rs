@@ -3,15 +3,19 @@ use clap::Parser;
 use raymarch::{
     camera::Camera,
     cli::Cli,
-    drawables::{sphere::Sphere, mandelbulb::Mandelbulb},
+    drawables::{sphere::Sphere, mandelbulb::Mandelbulb, cube::Cube},
     scene::{RenderOptions, Scene, SceneObject},
     transformation::Orientation,
     unsafe_buffer::UnsafeBuffer,
     vec3::Vec3,
 };
-use std::{sync::Arc, time::Instant};
+use std::{sync::Arc, time::Instant, panic};
 
 fn main() {
+
+    panic::set_hook(Box::new(|_| {
+        // Your custom panic hook logic here.
+    }));
     // let vec_a = Vec3::new(2.34623342, 5.2983742, 9.12387978);
     // let vec_b = Vec3::new(7.348756, 6.289734, 3.903457);
 
@@ -44,17 +48,24 @@ fn main() {
         //     1.5,
         //     Orientation::default(),
         // )),
-        Box::new(Sphere::new(
-            Vec3::new(-7_f32, 5_f32, 0_f32),
-            1.5,
-            Orientation::default(),
-        )),
+        // Box::new(Sphere::new(
+        //     Vec3::new(-7_f32, 5_f32, 0_f32),
+        //     1.5,
+        //     Orientation::default(),
+        // )),
         // Box::new(Sphere::new(
         //     Vec3::new(1.5_f32, 7_f32, 1_f32),
         //     1.5,
         //     Orientation::default(),
         // )),
-        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 8.0))
+
+        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 12.0))
+
+        // Box::new(Cube::new(Vec3::new(-10.0, 0.0, 6.0), Vec3::new(3.0, 3.0, 3.0))),
+        // Box::new(Cube::new(Vec3::new(10.0, 0.0, 6.0), Vec3::new(3.0, 3.0, 3.0))),
+        // Box::new(Cube::new(Vec3::new(10.0, 0.0, -6.0), Vec3::new(3.0, 3.0, 3.0))),
+        // Box::new(Cube::new(Vec3::new(-10.0, 0.0, -6.0), Vec3::new(3.0, 3.0, 3.0))),
+        // Box::new(Cube::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(3.0, 3.0, 3.0))),
     ];
     let mut scene = Arc::new(Scene::new(camera, scene_objects));
     let render_options = RenderOptions {
