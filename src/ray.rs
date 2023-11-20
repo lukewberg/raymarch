@@ -12,32 +12,36 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
     // let mut new_position: Option<[f32; 4]> = None;
 
     while last_closest > tolerance {
-        let mut closest = f32::INFINITY;
-        let mut i = 0;
-        let num_scene_objects = scene.scene_objects.len();
-        while i < num_scene_objects {
-            let distance = { scene.scene_objects[i].sdf(&position) };
+        // let mut closest = f32::INFINITY;
+        // let mut i = 0;
+        // let num_scene_objects = scene.scene_objects.len();
+        // while i < num_scene_objects {
+        //     let distance = { scene.scene_objects[i].sdf(&position) };
 
-            if distance < closest {
-                // last_closest = closest;
-                closest = distance;
-                // new_position =
-                //     Some((f32x4::splat(distance) + f32x4::from_array(position.vec)).into());
-            }
+        //     if distance < closest {
+        //         // last_closest = closest;
+        //         closest = distance;
+        //         // new_position =
+        //         //     Some((f32x4::splat(distance) + f32x4::from_array(position.vec)).into());
+        //     }
 
-            // Not a hit, abort!
-            // if closest > last_closest {
-            //     return 0;
-            // }
+        //     // Not a hit, abort!
+        //     // if closest > last_closest {
+        //     //     return 0;
+        //     // }
 
-            if distance > 100_f32 {
-                return 0_f32;
-            }
+        //     if distance > 100_f32 {
+        //         return 0_f32;
+        //     }
 
-            // if let Some(vec) = new_position {
-            //     (position).vec = vec;
-            // }
-            i += 1;
+        //     // if let Some(vec) = new_position {
+        //     //     (position).vec = vec;
+        //     // }
+        //     i += 1;
+        // }
+        let closest = distance_to_closest(scene, &position);
+        if closest > 100.0 {
+            return 0.0;
         }
         last_closest = closest;
         // Scale direction by distance
@@ -47,3 +51,21 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
     }
     1_f32 - (steps as f32 / 75_f32)
 }
+
+#[inline(always)]
+pub fn distance_to_closest(scene: &Scene, p: &Vec3) -> f32 {
+    let num_scene_objects = scene.scene_objects.len();
+    let mut closest = f32::INFINITY;
+    let mut i = 0;
+    while i < num_scene_objects {
+        let distance = scene.scene_objects[i].sdf(p);
+        if distance < closest {
+            closest = distance;
+        }
+        i += 1;
+    }
+    closest
+}
+
+
+// pub fn calculate_normal()
