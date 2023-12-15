@@ -21,7 +21,7 @@ impl SceneObject for Mandelbulb {
     }
 
     fn sdf(&self, p: &Vec3) -> f32 {
-        let mut z = *p;
+        let mut z = p.clone();
         let mut dr = 1.0;
         let mut r: f32 = 0_f32;
         for i in 0..90 {
@@ -50,8 +50,10 @@ impl SceneObject for Mandelbulb {
                 theta.sin() * phi.cos(),
                 phi.sin() * theta.sin(),
                 theta.cos(),
-            ) * zr;
-            z = z + self.pos;
+            );
+
+            z.vec = z.scale(zr);
+            z = z + *p;
         }
 
         return 0.5 * r.ln() * r / dr;

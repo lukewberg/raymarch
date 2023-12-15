@@ -5,7 +5,7 @@ use crate::{scene::Scene, vec3::Vec3};
 /// Marches the ray forward by the smallest distance returned by the scene's SceneObjects sdf functions.
 pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
     // Get distances to all Objects in scene
-    let tolerance: f32 = 0.0003;
+    let tolerance: f32 = 0.0001;
     let mut last_closest = f32::INFINITY;
     let mut position = (*origin).clone();
     let mut steps = 0;
@@ -49,7 +49,7 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> f32 {
         position.vec = (f32x4::from_array(position.vec) + f32x4::from_array(scaled)).to_array();
         steps += 1;
     }
-    1_f32 - (steps as f32 / 75_f32)
+    1_f32 - (steps as f32 / 255_f32)
 }
 
 #[inline(always)]
@@ -66,6 +66,5 @@ pub fn distance_to_closest(scene: &Scene, p: &Vec3) -> f32 {
     }
     closest
 }
-
 
 // pub fn calculate_normal()

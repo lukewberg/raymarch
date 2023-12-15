@@ -11,3 +11,4 @@ pub mod vec3;
 pub mod cli;
 pub mod unsafe_buffer;
 pub mod tests;
+pub mod vulkan;

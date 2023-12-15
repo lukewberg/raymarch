@@ -38,7 +38,7 @@ fn main() {
     let result_buffer =
         UnsafeBuffer::<f32>::new((args.width * args.height) as usize, num_cpus.get());
 
-    let camera = Camera::new(Vec3::new(0.0, -4.0, 0.0), 120.0, (args.width, args.height));
+    let camera = Camera::new(Vec3::new(0.0, -2.5, 0.0), 90.0, (args.width, args.height));
     // let uv_coords = camera.calc_uv_simd();
     // let sample_point = uv_coords[(100, 100)];
     // println!("{:?}", sample_point);
@@ -54,20 +54,14 @@ fn main() {
         //     Orientation::default(),
         // )),
         // Box::new(Sphere::new(
-        //     Vec3::new(1.5_f32, 7_f32, 1_f32),
+        //     Vec3::new(3_f32, 0_f32, 0_f32),
         //     1.5,
         //     Orientation::default(),
         // )),
 
         Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 12.0))
-
-        // Box::new(Cube::new(Vec3::new(-10.0, 0.0, 6.0), Vec3::new(3.0, 3.0, 3.0))),
-        // Box::new(Cube::new(Vec3::new(10.0, 0.0, 6.0), Vec3::new(3.0, 3.0, 3.0))),
-        // Box::new(Cube::new(Vec3::new(10.0, 0.0, -6.0), Vec3::new(3.0, 3.0, 3.0))),
-        // Box::new(Cube::new(Vec3::new(-10.0, 0.0, -6.0), Vec3::new(3.0, 3.0, 3.0))),
-        // Box::new(Cube::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(3.0, 3.0, 3.0))),
     ];
-    let mut scene = Arc::new(Scene::new(camera, scene_objects));
+    let scene = Arc::new(Scene::new(camera, scene_objects));
     let render_options = RenderOptions {
         threaded: args.threaded,
         width: args.width,

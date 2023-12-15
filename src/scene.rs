@@ -37,6 +37,7 @@ impl Scene {
         let uv = self.camera.calc_uv();
         let mut result_vec: Vec<f32> = Vec::with_capacity(uv.coords.len());
         for i in 0..uv.coords.len() {
+            let (u, v) = uv.coords[i];
             let (x, y) = self.camera.uv_to_screen(uv.coords[i]);
             let screen_projection = self.camera.screen_to_world(x, y);
             let mut direction = screen_projection - self.camera.origin;
@@ -108,7 +109,7 @@ impl Scene {
         let mut encoder = png::Encoder::new(w, width, height);
         encoder.set_color(png::ColorType::Rgba);
         encoder.set_depth(png::BitDepth::Eight);
-        encoder.set_source_gamma(png::ScaledFloat::from_scaled(45455)); // 1.0 / 2.2, scaled by 100000
+        // encoder.set_source_gamma(png::ScaledFloat::from_scaled(45455)); // 1.0 / 2.2, scaled by 100000
         encoder.set_source_gamma(png::ScaledFloat::new(1.0 / 2.2)); // 1.0 / 2.2, unscaled, but rounded
         let source_chromaticities = png::SourceChromaticities::new(
             // Using unscaled instantiation here
