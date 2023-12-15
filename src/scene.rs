@@ -8,10 +8,9 @@ use std::{
 
 use crate::{
     camera::Camera,
-    light::Light,
     ray,
     transformation::Transformable,
-    unsafe_buffer::{self, UnsafeBuffer},
+    unsafe_buffer::UnsafeBuffer,
     vec3::Vec3,
 };
 
@@ -37,7 +36,6 @@ impl Scene {
         let uv = self.camera.calc_uv();
         let mut result_vec: Vec<f32> = Vec::with_capacity(uv.coords.len());
         for i in 0..uv.coords.len() {
-            let (u, v) = uv.coords[i];
             let (x, y) = self.camera.uv_to_screen(uv.coords[i]);
             let screen_projection = self.camera.screen_to_world(x, y);
             let mut direction = screen_projection - self.camera.origin;

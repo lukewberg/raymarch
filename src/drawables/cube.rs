@@ -20,15 +20,15 @@ impl SceneObject for Cube {
     }
 
     fn sdf(&self, p: &Vec3) -> f32 {
-        let shiftPt = *p - self.pos;
-        let q = shiftPt.abs() - self.bounds;
+        let shift_pt = *p - self.pos;
+        let q = shift_pt.abs() - self.bounds;
         Vec3::combined_max(&q, &Vec3::new(0.0, 0.0, 0.0)).magnitude()
             + 0_f32.min(q.vec[0].max(q.vec[1].max(q.vec[2])))
     }
 }
 
 impl Transformable for Cube {
-    fn rotate(&mut self, x: f32, y: f32, z: f32) {
+    fn rotate(&mut self, _x: f32, _y: f32, _z: f32) {
         todo!()
     }
 

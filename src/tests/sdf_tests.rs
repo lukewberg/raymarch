@@ -1,6 +1,8 @@
-use std::simd::f32x4;
-
-use crate::{drawables::mandelbulb::{self, Mandelbulb}, vec3::Vec3, scene::SceneObject};
+use crate::{
+    drawables::mandelbulb::Mandelbulb,
+    scene::SceneObject,
+    vec3::Vec3,
+};
 
 #[test]
 fn test_mandelbulb_sdf() {

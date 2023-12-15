@@ -21,7 +21,7 @@ impl<T> UnsafeBuffer<T> {
         }
     }
 
-    pub fn write(&self, index: usize, value: T, thread_id: usize) {
+    pub fn write(&self, index: usize, value: T, _thread_id: usize) {
         unsafe {
             let buffer = self.buffer.get().as_mut().unwrap();
             (*buffer)[index] = value;
@@ -65,7 +65,7 @@ impl<T> ops::Index<usize> for UnsafeBuffer<T>
 }
 
 impl<T> ops::IndexMut<usize> for UnsafeBuffer<T> {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+    fn index_mut(&mut self, _index: usize) -> &mut Self::Output {
         todo!()
     }
 }

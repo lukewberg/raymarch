@@ -1,6 +1,6 @@
 use crate::{
     scene::SceneObject,
-    transformation::{Orientation, Transformable},
+    transformation::Transformable,
     vec3::Vec3,
 };
 
@@ -24,7 +24,7 @@ impl SceneObject for Mandelbulb {
         let mut z = p.clone();
         let mut dr = 1.0;
         let mut r: f32 = 0_f32;
-        for i in 0..90 {
+        for _i in 0..90 {
             r = z.magnitude();
 
             if r > 4.0 {
@@ -61,7 +61,7 @@ impl SceneObject for Mandelbulb {
 }
 
 impl Transformable for Mandelbulb {
-    fn rotate(&mut self, x: f32, y: f32, z: f32) {
+    fn rotate(&mut self, _x: f32, _y: f32, _z: f32) {
         todo!()
     }
 

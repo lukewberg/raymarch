@@ -32,7 +32,7 @@ impl SceneObject for Sphere {
 }
 
 impl Transformable for Sphere {
-    fn rotate(&mut self, x: f32, y: f32, z: f32) {
+    fn rotate(&mut self, _x: f32, _y: f32, _z: f32) {
         todo!()
     }
 

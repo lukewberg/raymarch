@@ -3,9 +3,8 @@ use clap::Parser;
 use raymarch::{
     camera::Camera,
     cli::Cli,
-    drawables::{sphere::Sphere, mandelbulb::Mandelbulb, cube::Cube},
+    drawables::{mandelbulb::Mandelbulb},
     scene::{RenderOptions, Scene, SceneObject},
-    transformation::Orientation,
     unsafe_buffer::UnsafeBuffer,
     vec3::Vec3,
 };
