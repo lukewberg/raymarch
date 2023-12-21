@@ -3,18 +3,19 @@ use clap::Parser;
 use raymarch::{
     camera::Camera,
     cli::Cli,
-    drawables::{mandelbulb::Mandelbulb},
+    drawables::{cube::Cube, mandelbulb::Mandelbulb, sphere::Sphere},
+    light::Light,
     scene::{RenderOptions, Scene, SceneObject},
+    transformation::Orientation,
     unsafe_buffer::UnsafeBuffer,
     vec3::Vec3,
 };
-use std::{sync::Arc, time::Instant, panic};
+use std::{panic, sync::Arc, time::Instant};
 
 fn main() {
-
-    panic::set_hook(Box::new(|_| {
-        // Your custom panic hook logic here.
-    }));
+    // panic::set_hook(Box::new(|_| {
+    //     // Your custom panic hook logic here.
+    // }));
     // let vec_a = Vec3::new(2.34623342, 5.2983742, 9.12387978);
     // let vec_b = Vec3::new(7.348756, 6.289734, 3.903457);
 
@@ -37,7 +38,7 @@ fn main() {
     let result_buffer =
         UnsafeBuffer::<f32>::new((args.width * args.height) as usize, num_cpus.get());
 
-    let camera = Camera::new(Vec3::new(0.0, -2.5, 0.0), 90.0, (args.width, args.height));
+    let camera = Camera::new(Vec3::new(0.0, -4.0, 0.0), 90.0, (args.width, args.height));
     // let uv_coords = camera.calc_uv_simd();
     // let sample_point = uv_coords[(100, 100)];
     // println!("{:?}", sample_point);
@@ -52,15 +53,24 @@ fn main() {
         //     1.5,
         //     Orientation::default(),
         // )),
-        // Box::new(Sphere::new(
-        //     Vec3::new(3_f32, 0_f32, 0_f32),
-        //     1.5,
-        //     Orientation::default(),
+        Box::new(Sphere::new(
+            Vec3::new(0_f32, 0_f32, 0_f32),
+            1.5,
+            Orientation::default(),
+        )),
+        // Box::new(Cube::new(
+        //     Vec3::new(0_f32, 0_f32, 0_f32),
+        //     Vec3::new(1_f32, 1_f32, 1_f32),
         // )),
-
-        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 12.0))
+        // Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 12.0))
     ];
-    let scene = Arc::new(Scene::new(camera, scene_objects));
+
+    let lights: Vec<Light> = vec![Light {
+        color: [0, 0, 0, 0],
+        intensity: 0.5,
+        pos: Vec3::new(2.0, -2.0, 0.0),
+    }];
+    let scene = Arc::new(Scene::new(camera, scene_objects, lights));
     let render_options = RenderOptions {
         threaded: args.threaded,
         width: args.width,

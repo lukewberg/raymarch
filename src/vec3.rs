@@ -1,3 +1,4 @@
+use std::simd::prelude::SimdFloat;
 use std::{ops, simd::f32x4};
 
 #[derive(Clone, Copy)]
@@ -50,12 +51,11 @@ impl Vec3 {
     }
 
     pub fn normalize_new(&self) -> Vec3 {
-        let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
-        let mag_simd = f32x4::splat(mag);
-        let vec_simd = f32x4::from_array(self.vec);
-        Vec3 {
-            vec: (vec_simd / mag_simd).into(),
-        }
+        // let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
+        let mag = self.magnitude();
+        // let mag_simd = f32x4::splat(mag);
+        // let vec_simd = f32x4::from_array(self.vec);
+        *self / mag
     }
 
     pub fn magnitude(&self) -> f32 {
@@ -146,6 +146,11 @@ impl Vec3 {
                 0.0,
             ],
         }
+    }
+
+    pub fn dot_prod(&self, rhs: &Vec3) -> f32 {
+        let mul = *self * *rhs;
+        (f32x4::from_array(mul.vec)).reduce_sum()
     }
 
     // pub fn batch_multiply_vec3_simd(vecs_a: [Vec3; ], vecs_b: [Vec3]) -> Vec<Vec3> {

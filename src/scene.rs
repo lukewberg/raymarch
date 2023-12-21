@@ -7,26 +7,28 @@ use std::{
 };
 
 use crate::{
-    camera::Camera,
-    ray,
-    transformation::Transformable,
-    unsafe_buffer::UnsafeBuffer,
+    camera::Camera, light::Light, ray, transformation::Transformable, unsafe_buffer::UnsafeBuffer,
     vec3::Vec3,
 };
 
 pub struct Scene {
     pub camera: Camera,
-    // pub lights: Vec<Light>,
+    pub lights: Vec<Light>,
     pub scene_objects: Vec<Box<dyn SceneObject>>,
 }
 
 unsafe impl Sync for Scene {}
 
 impl Scene {
-    pub fn new(camera: Camera, scene_objects: Vec<Box<dyn SceneObject>>) -> Scene {
+    pub fn new(
+        camera: Camera,
+        scene_objects: Vec<Box<dyn SceneObject>>,
+        lights: Vec<Light>,
+    ) -> Scene {
         Scene {
             camera,
             scene_objects,
+            lights,
         }
     }
 
@@ -40,7 +42,7 @@ impl Scene {
             let screen_projection = self.camera.screen_to_world(x, y);
             let mut direction = screen_projection - self.camera.origin;
             direction.normalize();
-            result_vec.push(ray::march(&self, &self.camera.origin, &direction));
+            result_vec.push(ray::march(&self, &self.camera.origin, &direction).intensity);
         }
         let mut converted_results: Vec<[u8; 4]> = Vec::with_capacity(result_vec.len());
         for x in result_vec {
@@ -73,7 +75,8 @@ impl Scene {
                         direction.normalize();
                         result_buffer.write(
                             index,
-                            ray::march(&cloned_scene, &cloned_scene.camera.origin, &direction),
+                            ray::march(&cloned_scene, &cloned_scene.camera.origin, &direction)
+                                .intensity,
                             id,
                         );
                     } else {

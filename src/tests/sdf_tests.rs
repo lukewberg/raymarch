@@ -20,3 +20,8 @@ fn test_mandelbulb_sdf() {
     // let step_two = mandelbulb.sdf(&new_pos);
     // println!("{}", step_two)
 }
+
+#[test]
+fn test_surface_normal() {
+    
+}
