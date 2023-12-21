@@ -1,3 +1,4 @@
+use std::simd::Mask;
 use std::simd::prelude::SimdFloat;
 use std::{ops, simd::f32x4};
 
@@ -51,15 +52,17 @@ impl Vec3 {
     }
 
     pub fn normalize_new(&self) -> Vec3 {
-        // let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
-        let mag = self.magnitude();
-        // let mag_simd = f32x4::splat(mag);
-        // let vec_simd = f32x4::from_array(self.vec);
-        *self / mag
+        let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
+        let mag_simd = f32x4::splat(mag);
+        let vec_simd = f32x4::from_array(self.vec);
+        Vec3 {
+            vec: (vec_simd / mag_simd).into(),
+        }
     }
 
     pub fn magnitude(&self) -> f32 {
         f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2))
+        // f32::sqrt((f32x4::from_array(self.vec) * f32x4::from_array(self.vec)).reduce_sum())
     }
 
     /// Distance between this vector and that which is passed in
@@ -238,8 +241,9 @@ impl ops::Sub<f32> for Vec3 {
     fn sub(self, rhs: f32) -> Self::Output {
         let vec_scalar = f32x4::splat(rhs);
         let vec_vec = f32x4::from_array(self.vec);
+        let mask = (Mask::from_array([true, true, true, false])).select(vec_scalar, vec_vec);
         Vec3 {
-            vec: (vec_scalar - vec_vec).into(),
+            vec: (vec_vec - mask).into(),
         }
     }
 }
