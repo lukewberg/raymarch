@@ -46,6 +46,10 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> RayResult {
     }
 }
 
+pub fn march_light(scene: &Scene, origin: &Vec3, direction: &Vec3) -> RayResult {
+    
+}
+
 pub fn distance_to_closest(scene: &Scene, p: &Vec3) -> (f32, usize) {
     let num_scene_objects = scene.scene_objects.len();
     let mut closest = f32::INFINITY;
