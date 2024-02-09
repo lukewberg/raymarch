@@ -46,7 +46,7 @@ fn main() {
         //     Vec3::new(0_f32, 0_f32, 0_f32),
         //     Vec3::new(1_f32, 1_f32, 1_f32),
         // )),
-        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 2.0)),
+        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 10.0)),
     ];
 
     let lights: Vec<Light> = vec![Light {

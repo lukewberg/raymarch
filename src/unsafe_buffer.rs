@@ -29,19 +29,11 @@ impl<T> UnsafeBuffer<T> {
     }
 
     pub fn get_valid_index(&self, thread_id: usize, step: usize) -> Option<usize> {
-        if thread_id <= self.threads{
+        if thread_id <= self.threads {
             let result = ((self.threads - 1) * step) + thread_id;
             if result < self.capacity {
                 return Some(result);
             }
-            // match thread_id {
-            //     0 => {
-            //         return Some(step * (self.threads - 1));
-            //     }
-            //     _ => {
-            //         return Some((step * (self.threads)) + thread_id);
-            //     }
-            // }
         }
         None
     }
@@ -59,7 +51,7 @@ impl<T> ops::Index<usize> for UnsafeBuffer<T>
                 .buffer
                 .get()
                 .as_ref()
-                .expect("Failed to read from shared UnsafeBuffer, abort!"))[index])
+                .expect("Failed to read from shared UnsafeBuffer, panic!"))[index])
         }
     }
 }

@@ -14,11 +14,15 @@ codegen-units = 1
 lto = "fat"
 opt-level = 3
 
-[build]
-rustflags = ["-C", "target-cpu=native"]
-
 [dependencies]
 clap = { version = "4.4.7", features = ["derive"] }
 png = "0.17.10"
+rand = "0.8.5"
 vulkano = "0.34.1"
 
+[dev-dependencies]
+criterion = { version = "0.5.1", features = ["html_reports"] }
+
+[[bench]]
+name = "simd_benchmarks"
+harness = false

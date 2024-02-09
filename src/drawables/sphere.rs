@@ -7,7 +7,7 @@ use crate::{
 pub struct Sphere {
     pos: Vec3,
     radius: f32,
-    orientation: Orientation,
+    _orientation: Orientation,
 }
 
 impl Sphere {
@@ -15,7 +15,7 @@ impl Sphere {
         Sphere {
             pos,
             radius,
-            orientation,
+            _orientation: orientation,
         }
     }
 }
