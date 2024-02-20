@@ -1,6 +1,7 @@
 use std::{
     fs::File,
     io::BufWriter,
+    os::windows,
     path::Path,
     sync::Arc,
     thread::{self, JoinHandle},
@@ -104,7 +105,10 @@ impl Scene {
     }
 
     pub fn flush_png(data: &[u8], width: u32, height: u32) {
-        let path = Path::new(r"./result.png");
+        if !Path::exists(&Path::new(r"./output")) {
+            std::fs::create_dir("./output").expect("Unable to create output directory!");
+        }
+        let path = Path::new(r"./output/result.png");
         let file = File::create(path).unwrap();
         let ref mut w = BufWriter::new(file);
         let mut encoder = png::Encoder::new(w, width, height);
