@@ -37,16 +37,17 @@ fn main() {
         //     1.5,
         //     Orientation::default(),
         // )),
-        // Box::new(Sphere::new(
-        //     Vec3::new(0_f32, 0_f32, 0_f32),
-        //     1.5,
-        //     Orientation::default(),
-        // )),
+        Box::new(Sphere::new(
+            Vec3::new(0_f32, 0_f32, 0_f32),
+            1.5,
+            0.5,
+            Orientation::default(),
+        )),
         // Box::new(Cube::new(
         //     Vec3::new(0_f32, 0_f32, 0_f32),
         //     Vec3::new(1_f32, 1_f32, 1_f32),
         // )),
-        Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 10.0)),
+        // Box::new(Mandelbulb::new(Vec3::new(0_f32, 0_f32, 0_f32), 10.0, 1.0)),
     ];
 
     let lights: Vec<Light> = vec![Light {

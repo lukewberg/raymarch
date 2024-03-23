@@ -1,5 +1,5 @@
-use std::simd::Mask;
 use std::simd::prelude::SimdFloat;
+use std::simd::Mask;
 use std::{ops, simd::f32x4};
 
 #[derive(Clone, Copy)]
@@ -44,6 +44,7 @@ impl Vec3 {
         &self.vec[2]
     }
 
+    #[inline(always)]
     pub fn normalize(&mut self) {
         let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
         let mag_simd = f32x4::splat(mag);
@@ -51,6 +52,7 @@ impl Vec3 {
         self.vec = (vec_simd / mag_simd).into();
     }
 
+    #[inline(always)]
     pub fn normalize_new(&self) -> Vec3 {
         let mag = f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2));
         let mag_simd = f32x4::splat(mag);
@@ -60,12 +62,14 @@ impl Vec3 {
         }
     }
 
+    #[inline(always)]
     pub fn magnitude(&self) -> f32 {
         f32::sqrt(self.vec[0].powi(2) + self.vec[1].powi(2) + self.vec[2].powi(2))
         // f32::sqrt((f32x4::from_array(self.vec) * f32x4::from_array(self.vec)).reduce_sum())
     }
 
     /// Distance between this vector and that which is passed in
+    #[inline(always)]
     pub fn distance(&self, p: &Vec3) -> f32 {
         // Can't use implemented operator overloads because we don't want to move values.
         let delta_vec: [f32; 4] =
@@ -76,6 +80,7 @@ impl Vec3 {
         result.sqrt()
     }
 
+    #[inline(always)]
     pub fn scale(&self, scalar: f32) -> [f32; 4] {
         (f32x4::from_array(self.vec) * f32x4::splat(scalar)).into()
         // [
@@ -86,6 +91,7 @@ impl Vec3 {
         // ]
     }
 
+    #[inline(always)]
     pub fn multiply_vec3_simd(a: &Vec3, b: &Vec3) -> Vec3 {
         // Multiply using SIMD
         let vec_a = f32x4::from_array(a.vec);
@@ -96,6 +102,7 @@ impl Vec3 {
         }
     }
 
+    #[inline(always)]
     pub fn multiply_vec3(a: &Vec3, b: &Vec3) -> Vec3 {
         let mut result: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
         result[0] = a.vec[0] * b.vec[0];
@@ -104,6 +111,7 @@ impl Vec3 {
         Vec3 { vec: result }
     }
 
+    #[inline(always)]
     pub fn multiply_vec3_scalar_simd(&self, scalar: f32) -> Vec3 {
         let vec_vec = f32x4::from_array(self.vec);
         let vec_scalar = f32x4::splat(scalar);
@@ -112,6 +120,7 @@ impl Vec3 {
         }
     }
 
+    #[inline(always)]
     pub fn multiply_vec3_scalar(&self, scalar: f32) -> Vec3 {
         Vec3 {
             vec: [
@@ -123,12 +132,14 @@ impl Vec3 {
         }
     }
 
+    #[inline(always)]
     pub fn abs(&self) -> Vec3 {
         Vec3 {
             vec: [self.vec[0].abs(), self.vec[1].abs(), self.vec[2].abs(), 0.0],
         }
     }
 
+    #[inline(always)]
     pub fn combined_max(a: &Vec3, b: &Vec3) -> Vec3 {
         Vec3 {
             vec: [
@@ -140,6 +151,7 @@ impl Vec3 {
         }
     }
 
+    #[inline(always)]
     pub fn combined_min(a: &Vec3, b: &Vec3) -> Vec3 {
         Vec3 {
             vec: [
@@ -151,6 +163,7 @@ impl Vec3 {
         }
     }
 
+    #[inline(always)]
     pub fn dot_prod(&self, rhs: &Vec3) -> f32 {
         let mul = *self * *rhs;
         (f32x4::from_array(mul.vec)).reduce_sum()
@@ -159,6 +172,14 @@ impl Vec3 {
     // pub fn batch_multiply_vec3_simd(vecs_a: [Vec3; ], vecs_b: [Vec3]) -> Vec<Vec3> {
     //     Vec::new()
     // }
+
+    #[inline(always)]
+    pub fn reflect(&self, normal: &Vec3) -> (Vec3, Vec3) {
+        let v = (*normal * 2_f32) * ((*normal * -1_f32) * *self);
+        let reflected = *self + v;
+        (reflected, v)
+    }
+
 }
 
 impl ops::Mul<f32> for Vec3 {

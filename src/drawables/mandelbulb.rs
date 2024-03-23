@@ -1,17 +1,18 @@
-use crate::{
-    scene::SceneObject,
-    transformation::Transformable,
-    vec3::Vec3,
-};
+use crate::{scene::SceneObject, transformation::Transformable, vec3::Vec3};
 
 pub struct Mandelbulb {
     pos: Vec3,
     power: f32,
+    specular_intensity: f32,
 }
 
 impl Mandelbulb {
-    pub fn new(pos: Vec3, power: f32) -> Mandelbulb {
-        Mandelbulb { pos, power }
+    pub fn new(pos: Vec3, power: f32, specular_intensity: f32) -> Mandelbulb {
+        Mandelbulb {
+            pos,
+            power,
+            specular_intensity,
+        }
     }
 }
 
@@ -37,7 +38,7 @@ impl SceneObject for Mandelbulb {
             let mut phi = f32::atan2(z.vec[1], z.vec[0]);
             // let mut phi = z.vec[1].atan2(z.vec[0]);
             // dr =  pow( r, self.power-1.0)*Power*dr + 1.0;
-            dr = f32::powf(r, self.power - 1.0) * self.power*dr + 1.0;
+            dr = f32::powf(r, self.power - 1.0) * self.power * dr + 1.0;
             // dr = r.powf(self.power - 1.0) * self.power * dr + 1.0;
             // scale and rotate the point
             let zr = f32::powf(r, self.power);
@@ -57,6 +58,10 @@ impl SceneObject for Mandelbulb {
         }
 
         return 0.5 * r.ln() * r / dr;
+    }
+
+    fn specular_intensity(&self) -> f32 {
+        self.specular_intensity
     }
 }
 

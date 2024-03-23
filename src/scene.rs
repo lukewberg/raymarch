@@ -1,7 +1,6 @@
 use std::{
     fs::File,
     io::BufWriter,
-    os::windows,
     path::Path,
     sync::Arc,
     thread::{self, JoinHandle},
@@ -140,4 +139,6 @@ pub struct RenderOptions {
 pub trait SceneObject: Transformable + Send {
     fn pos(&self) -> &Vec3;
     fn sdf(&self, p: &Vec3) -> f32;
+    fn specular_intensity(&self) -> f32;
+    fn surface_color(&self) -> [u8; 4];
 }
