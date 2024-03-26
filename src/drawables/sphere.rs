@@ -7,15 +7,22 @@ use crate::{
 pub struct Sphere {
     pos: Vec3,
     radius: f32,
+    color: Vec3,
     specular_intensity: f32,
     _orientation: Orientation,
 }
 
 impl Sphere {
-    pub fn new(pos: Vec3, radius: f32, specular_intensity: f32, orientation: Orientation) -> Sphere {
+    pub fn new(
+        pos: Vec3,
+        radius: f32,
+        specular_intensity: f32,
+        orientation: Orientation,
+    ) -> Sphere {
         Sphere {
             pos,
             radius,
+            color: [255, 255, 255, 0].into(),
             specular_intensity,
             _orientation: orientation,
         }
@@ -31,9 +38,13 @@ impl SceneObject for Sphere {
         // self.pos.magnitude() - self.radius
         p.distance(&self.pos) - self.radius
     }
-    
+
     fn specular_intensity(&self) -> f32 {
         self.specular_intensity
+    }
+
+    fn surface_color(&self) -> Vec3 {
+        self.color
     }
 }
 

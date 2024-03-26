@@ -51,7 +51,7 @@ fn main() {
     ];
 
     let lights: Vec<Light> = vec![Light {
-        color: [0, 0, 0, 0],
+        color: [255, 255, 255, 0],
         intensity: 0.5,
         pos: Vec3::new(2.0, -2.0, 0.0),
     }];

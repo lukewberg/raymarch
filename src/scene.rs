@@ -140,5 +140,5 @@ pub trait SceneObject: Transformable + Send {
     fn pos(&self) -> &Vec3;
     fn sdf(&self, p: &Vec3) -> f32;
     fn specular_intensity(&self) -> f32;
-    fn surface_color(&self) -> [u8; 4];
+    fn surface_color(&self) -> Vec3;
 }

@@ -1,8 +1,7 @@
 use std::{f32::consts::PI, simd::f32x4, sync::Arc};
 
 use crate::{
-    scene::{Scene, SceneObject},
-    vec3::Vec3,
+    light::Light, scene::{Scene, SceneObject}, vec3::Vec3
 };
 
 /// Marches the ray forward by the smallest distance returned by the scene's SceneObjects sdf functions.
@@ -26,6 +25,7 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> RayResult {
             return RayResult {
                 point: position,
                 intensity: 0.0,
+                light_result: [0, 0, 0, 0]
             };
         }
         last_closest = closest;
@@ -40,10 +40,14 @@ pub fn march(scene: &Scene, origin: &Vec3, direction: &Vec3) -> RayResult {
     // let normal2 = ((*(scene.scene_objects[object_index].pos()) - position) * -1.0).normalize_new();
     let light_direction = (scene.lights[0].pos - position).normalize_new();
     let light_diff = light_direction.dot_prod(&normal);
+    let reflection_tup = (light_direction * -1_f32).reflect(&normal);
+    let specular_light = Light::get_specular(&scene.lights[0], &scene.scene_objects[object_index], reflection_tup);
+    let surface_color = scene.scene_objects[object_index].surface_color();
     // 1_f32 - (steps as f32 / 255_f32)
     RayResult {
         point: position,
         intensity: light_diff,
+        light_result
     }
 }
 
@@ -60,9 +64,7 @@ pub fn march_light(scene: &Scene, origin: &Vec3, direction: &Vec3, mode: LightMo
     while closest < 100.0 {
         while !inflected {
             let (distance, index) = distance_to_closest(scene, &position);
-            if distance < obj_distances[index] {
-                
-            }
+            if distance < obj_distances[index] {}
             obj_distances[index] = distance;
         }
     }
@@ -105,11 +107,12 @@ pub fn calculate_surface_normal(
 pub struct RayResult {
     pub point: Vec3,
     pub intensity: f32,
+    pub light_result: [u8; 4]
 }
 
 pub enum LightMode {
     ToLights,
-    Reflections
+    Reflections,
 }
 
 // pub fn calculate_normal()

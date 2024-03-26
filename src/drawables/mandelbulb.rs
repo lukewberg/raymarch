@@ -3,6 +3,7 @@ use crate::{scene::SceneObject, transformation::Transformable, vec3::Vec3};
 pub struct Mandelbulb {
     pos: Vec3,
     power: f32,
+    color: Vec3,
     specular_intensity: f32,
 }
 
@@ -11,6 +12,7 @@ impl Mandelbulb {
         Mandelbulb {
             pos,
             power,
+            color: [255, 255, 255, 0].into(),
             specular_intensity,
         }
     }
@@ -62,6 +64,10 @@ impl SceneObject for Mandelbulb {
 
     fn specular_intensity(&self) -> f32 {
         self.specular_intensity
+    }
+
+    fn surface_color(&self) -> Vec3 {
+        todo!()
     }
 }
 

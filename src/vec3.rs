@@ -1,5 +1,6 @@
+use std::simd::num::SimdUint;
 use std::simd::prelude::SimdFloat;
-use std::simd::Mask;
+use std::simd::{u8x4, Mask};
 use std::{ops, simd::f32x4};
 
 #[derive(Clone, Copy)]
@@ -173,13 +174,13 @@ impl Vec3 {
     //     Vec::new()
     // }
 
+    /// Returns a tuple of the reflected vector and the vertical vector
     #[inline(always)]
     pub fn reflect(&self, normal: &Vec3) -> (Vec3, Vec3) {
-        let v = (*normal * 2_f32) * ((*normal * -1_f32) * *self);
+        let v = (*normal * 2_f32) * ((*normal * -1_f32).dot_prod(self));
         let reflected = *self + v;
         (reflected, v)
     }
-
 }
 
 impl ops::Mul<f32> for Vec3 {
@@ -278,5 +279,19 @@ impl ops::Sub<Vec3> for Vec3 {
         Vec3 {
             vec: (vec_vec - vec_rhs).into(),
         }
+    }
+}
+
+impl From<[u8; 4]> for Vec3 {
+    fn from(value: [u8; 4]) -> Self {
+        Vec3 {
+            vec: u8x4::from_array(value).cast::<f32>().into(),
+        }
+    }
+}
+
+impl From<[f32; 4]> for Vec3 {
+    fn from(value: [f32; 4]) -> Self {
+        Vec3 { vec: value }
     }
 }
